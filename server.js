@@ -6,12 +6,12 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Local PC ကနေ Docker ထဲက MongoDB ဆီ လှမ်းချိတ်မယ့် လင့်ခ် (Password ကို secret လို့ ပြင်ထားပါတယ်)
-const mongoUrlLocal = "mongodb://admin:password@localhost:27017";
-const dbName = "user_profile"; // မင်း Mongo-Express ထဲမှာ မြင်ရတဲ့ Database နာမည်အတိုင်း ပြင်လိုက်ပါပြီ
+const mongoUrlLocal = "mongodb://admin:password@mongodb:27017";
+const dbName = "user_profile";
 
-// Home route - index.html ဖိုင်ကို ပို့ပေးမယ့်နေရာ
+// ဟောဒီနေရာလေးကို ver-1.1 အတွက် စာသားလေး နည်းနည်း ပြင်လိုက်ရအောင်ဗျာ
 app.get('/', function (req, res) {
+    console.log("Request received for Version 1.1! 🚀");
     res.sendFile(path.join(__dirname, "index.html"));
 });
 
@@ -21,14 +21,13 @@ app.post('/update-profile', async function (req, res) {
     let dbClient;
 
     try {
-        // ၁။ ဒေတာဘေ့စ်ဆီ စတင်ချိတ်ဆက်မယ်
         dbClient = await MongoClient.connect(mongoUrlLocal);
         const db = dbClient.db(dbName);
 
-        // ၂။ user_profile database ထဲက "users" ဆိုတဲ့ collection ထဲကို ဒေတာ ထည့်မယ်
         await db.collection("users").insertOne(userObj);
 
-        // ၃။ အောင်မြင်ရင် browser ဆီ ဒေတာပြန်ပို့မယ်
+        // ဒေတာပြန်ပို့တဲ့အခါ App version လေးပါ တစ်ခါတည်း ထည့်ပေးလိုက်မယ်
+        userObj.app_version = "ver-1.1";
         res.send(userObj);
 
     } catch (err) {
@@ -42,5 +41,5 @@ app.post('/update-profile', async function (req, res) {
 });
 
 app.listen(3000, function () {
-    console.log("App listening on port 3000!");
+    console.log("App listening on port 3000! (Running Version 1.1 🚀)");
 });
