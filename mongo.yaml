@@ -14,10 +14,7 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=password
-    #networks:
-      # frontend-net  # <--- Add this (Network A)
-      #- admin-net     # <--- Add this (Network B)
-
+  
   mongo-express:
     image: mongo-express
     restart: always
@@ -27,12 +24,4 @@ services:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
       - ME_CONFIG_MONGODB_ADMINPASSWORD=password
       - ME_CONFIG_MONGODB_SERVER=mongodb
-    #networks:
-      #- admin-net     # <--- Add this (Only Network B)
 
-# Define the networks at the root level (bottom of the file)
-#networks:
-  #frontend-net:
-    #driver: bridge
-  #admin-net:
-    #driver: bridge
